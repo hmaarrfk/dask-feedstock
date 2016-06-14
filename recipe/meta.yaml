@@ -10,7 +10,7 @@ source:
   md5: 581c3f23c46eea79a1b68aed4579d57a
 
 build:
-  number: 0
+  number: 1
   script: python setup.py install --single-version-externally-managed --record=record.txt
 
 requirements:
@@ -22,6 +22,7 @@ requirements:
     - python
     - bokeh
     - cloudpickle >=0.2.1
+    - distributed >=1.11.0
     - numpy
     - pandas >=0.18.0
     - partd >=0.3.3
