@@ -7,7 +7,7 @@ package:
 source:
   fn: dask-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/d/dask/dask-{{ version }}.tar.gz
-  md5: c1660845ae12449837d9bce9758933a9
+  sha256: 24e9c50181370761f8a0c82e233fa823a7eb9ae01de50ee73378fd46724f669e
 
 build:
   number: 0
