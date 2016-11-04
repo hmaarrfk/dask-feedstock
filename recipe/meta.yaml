@@ -1,4 +1,4 @@
-{% set version = "0.11.1" %}
+{% set version = "0.12.0" %}
 
 package:
   name: dask
@@ -7,7 +7,7 @@ package:
 source:
   fn: dask-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/d/dask/dask-{{ version }}.tar.gz
-  md5: c92f01eea68045b2b39565ae131496c8
+  md5: c1660845ae12449837d9bce9758933a9
 
 build:
   number: 0
@@ -25,7 +25,7 @@ requirements:
     - distributed >=1.11.0
     - numpy
     - pandas >=0.18.0
-    - partd >=0.3.3
+    - partd >=0.3.6
     - toolz >=0.7.2
 
 test:
