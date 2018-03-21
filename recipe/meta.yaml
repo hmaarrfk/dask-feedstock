@@ -1,11 +1,11 @@
-{% set version = "0.17.1" %}
+{% set version = "0.17.2" %}
 
 package:
   name: dask
   version: "{{ version }}"
 
 build:
-  number: 2
+  number: 0
   noarch: python
 
 requirements:
@@ -19,7 +19,7 @@ requirements:
     - cytoolz >=0.7.3
     - dask-core {{ version }}
     - distributed >=1.21.0
-    - numpy
+    - numpy >=1.10.4
     - pandas >=0.19.0
     - partd >=0.3.8
     - toolz >=0.7.3
