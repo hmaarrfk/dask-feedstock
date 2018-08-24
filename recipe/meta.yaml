@@ -1,51 +1,186 @@
+# Note: there are many handy hints in comments in this example -- remove them when you've finalized your recipe
+# Note 2: this recipe is specifically designed for more advanced projects with many
+#         optional dependencies.
+#         You are encouraged to first read the basic example to get a better enderstanding of 
+#         the different sections in the meta.yaml file.
+
+# Jinja variables help maintain the recipe as you'll update the version only here.
+# Using the name variable with the URL in line 13 is convenient
+# when copying and pasting from another recipe, but not really needed.
+{% set name = "dask" %}
 {% set version = "0.18.2" %}
 
 package:
-  name: dask
-  version: "{{ version }}"
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  # If getting the source from GitHub remove the line above
+  # uncomment the line below and modify as needed
+  # url: https://github.com/simplejson/{{ name }}/archive/{{ version }}.tar.gz
+  sha256: 8fba559911788010ecedf58e540004d56d09f7829a1400dd72b74ffedafafabc
+  # sha256 is the prefered checksum -- you can get it for a file with:
+  #  `openssl sha256 <file name>`.
+  # You may need the openssl package, available on conda-forge
+  #  `conda install openssl -c conda-forge``
 
 build:
   number: 0
-  noarch: python
+  # no script section goes here
 
-requirements:
-  build:
-    - python
 
-  run:
-    - python
-    - bokeh
-    - cloudpickle >=0.2.1
-    - cytoolz >=0.7.3
-    - dask-core {{ version }}
-    - distributed >=1.22.0
-    - numpy >=1.11.0
-    - pandas >=0.19.0
-    - partd >=0.3.8
-    - toolz >=0.7.3
+# This section may be empty and completely optional if you don't have `build` requirements
+# requirements:
+#   build:
+    # if your project compiles code (such as a C extension) then add the required compilers as separate entries here.
+    # compilers are named 'c', 'cxx' and 'fortran'.
+#     - {{ compiler('c') }}
 
-test:
-  imports:
-    - dask
-    - dask.array
-    - dask.bag
-    - dask.bytes
-    - dask.dataframe
-    - dask.dataframe.tseries
-    - dask.delayed
-    - dask.diagnostics
-    - dask.distributed
-    - distributed
+
+outputs:
+  # The naked package should be a pointer to an other subpackage
+  # We reccomend pointing to all
+  - name: {{ name|lower }}
+    # The following line specifies that the package is pure python and the recipe is exactly the same for all platforms.
+    # It is okay if the dependencies are not built for all platforms/versions, although selectors are still not allowed.
+    # See https://conda-forge.org/docs/meta.html#building-noarch-packages for more details.
+    # noarch needs to be specified in every subpacakage
+    noarch: python
+    requirements:
+      run:
+      - {{ pin_subpackage(name|lower + '-all', exact=True) }}
+  # The core package should contain most of recipe
+  - name: {{ name|lower + '-core' }}
+    noarch: python
+    # Only the core package should be installed
+    # If the installation is complex, or different between Unix and Windows, use separate bld.bat and build.sh files instead of this key.
+    # By default, the package will be built for the Python versions supported by conda-forge and for all major OSs.
+    # Add the line "skip: True  # [py<35]" (for example) to limit to Python 3.5 and newer, or "skip: True  # [not win]" to limit to Windows.
+    script: build_package.sh   # [not win]
+    script: build_package.bat  # [win]
+    requirements:
+      host:
+        - python
+      run:
+        - python
+      # Run constrained should include all optional dependencies
+      # that have version constrains
+      run_constrained:
+        - cloudpickle >=0.2.1
+        - cytoolz >=0.7.3
+        - distributed >=1.22.0
+        - numpy >=1.11.0
+        # Dask only uses the high level API, and as such
+        # doesn't dpend on the C numpy api.
+        # - {{ pin_compatible('numpy') }}
+        - pandas >=0.19.0
+        - partd >=0.3.8
+        - toolz >=0.7.3
+    test:
+      # Some package might need a `test/commands` key to check CLI.
+      # List all the packages/modules that `run_test.py` imports.
+      imports:
+        - dask
+
+  # subpackages can include additional dependencies
+  - name: {{ name|lower + '-array' }}
+    noarch: python
+    requirements:
+      run:
+        - {{ pin_subpackage(name|lower + '-core', exact=True) }}
+        # These packages should not have any constraints
+        # as the constraints were already specified in the `core` package
+        - numpy
+        - toolz
+    test:
+      imports:
+        - "dask.array"
+  - name: {{ name|lower + '-bag' }}
+    noarch: python
+    requirements:
+      run:
+        - {{ pin_subpackage(name|lower + '-core', exact=True) }}
+        - cloudpickle
+        - toolz
+        - partd
+    test:
+      imports:
+        - dask.bag
+        - dask.bytes
+  - name: {{ name|lower + '-dataframe' }}
+    noarch: python
+    requirements:
+      run:
+        - {{ pin_subpackage(name|lower + '-core', exact=True) }}
+        - numpy
+        - pandas
+        - toolz
+        - partd
+        - cloudpickle
+    test:
+      imports:
+        - dask.dataframe
+        - dask.dataframe.tseries
+  - name: {{ name|lower + '-distributed' }}
+    noarch: python
+    requirements:
+      run:
+        - {{ pin_subpackage(name|lower + '-core', exact=True) }}
+        - distributed
+    test:
+      imports:
+        - dask.distributed
+        - distributed
+  - name: {{ name|lower + '-delayed' }}
+    noarch: python
+    requirements:
+      run:
+        - {{ pin_subpackage(name|lower + '-core', exact=True) }}
+        - toolz
+    test:
+      imports:
+        - dask.delayed
+  - name: {{ name|lower + '-all' }}
+    noarch: python
+    requirements:
+      run:
+        - {{ pin_subpackage(name|lower + '-array', exact=True) }}
+        - {{ pin_subpackage(name|lower + '-bag', exact=True) }}
+        - {{ pin_subpackage(name|lower + '-dataframe', exact=True) }}
+        - {{ pin_subpackage(name|lower + '-distributed', exact=True) }}
+        - {{ pin_subpackage(name|lower + '-delayed', exact=True) }}
+      # You probably don't need a test section here
+
 
 about:
   home: http://github.com/dask/dask/
+  # Remember to specify the license variants for BSD, Apache, GPL, and LGLP.
+  # Prefer the short version, e.g: GPL-2.0 instead of GNU General Public License version 2.0
+  # See https://opensource.org/licenses/alphabetical
   license: BSD 3-Clause
+  # The license_family, i.e. "BSD" if license is "BSD-3-Clause". (optional)
+  license_family: BSD
+  # It is strongly encouraged to include a license file in the package,
+  # (even if the license doesn't require it) using the license_file entry.
+  # See http://conda.pydata.org/docs/building/meta-yaml.html#license-file
+  license_file: LICENSE.txt
   summary: 'Parallel Python with task scheduling'
+
+  # The remaining entries in this section are optional, but recommended
+  description: |
+     Dask natively scales Python
+
+     Dask provides advanced parallelism for analytics, enabling performance at
+     scale for the tools you love
+
   doc_url: https://dask.pydata.org/
   dev_url: https://github.com/dask/dask
 
 extra:
   recipe-maintainers:
+    # GitHub IDs for maintainers of the recipe.
+    # Always check with the people listed below if they are OK becoming maintainers of the recipe. (There will be spam!)
     - alimanfoo
     - jakirkham
     - jcrist
