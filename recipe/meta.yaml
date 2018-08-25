@@ -50,6 +50,8 @@ outputs:
     requirements:
       run:
       - {{ pin_subpackage(name|lower + '-all', exact=True) }}
+      # Add convenince packages here too.
+      - bokeh
   # The core package should contain most of recipe
   - name: {{ name|lower + '-core' }}
     noarch: python
