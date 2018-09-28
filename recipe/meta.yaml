@@ -2,40 +2,87 @@
 
 package:
   name: dask
-  version: "{{ version }}"
+  version: {{ version }}
 
 build:
-  number: 0
+  number: 1
   noarch: python
 
 requirements:
-  build:
-    - python
-
   run:
-    - python
     - bokeh >=0.13.0
-    - cloudpickle >=0.2.1
-    - cytoolz >=0.7.3
-    - dask-core {{ version }}
-    - distributed >=1.23.3
-    - numpy >=1.11.0
-    - pandas >=0.19.0
-    - partd >=0.3.8
-    - toolz >=0.7.3
+    - dask-core  =={{ version }}
+    - {{ pin_subpackage('dask-array', exact=True) }}
+    - {{ pin_subpackage('dask-bag', exact=True) }}
+    - {{ pin_subpackage('dask-dataframe', exact=True) }}
+    - {{ pin_subpackage('dask-distributed', exact=True) }}
+    - {{ pin_subpackage('dask-delayed', exact=True) }}
 
-test:
-  imports:
-    - dask
-    - dask.array
-    - dask.bag
-    - dask.bytes
-    - dask.dataframe
-    - dask.dataframe.tseries
-    - dask.delayed
-    - dask.diagnostics
-    - dask.distributed
-    - distributed
+outputs:
+  - name: dask-array
+    build:
+      noarch: python
+    requirements:
+      run:
+        - dask-core  =={{ version }}
+        - numpy >=1.11.0
+        - toolz >=0.7.3
+        - cytoolz >=0.7.3
+    test:
+      imports:
+        - dask.array
+  - name: dask-bag
+    build:
+      noarch: python
+    requirements:
+      run:
+        - dask-core  =={{ version }}
+        - cloudpickle >=0.2.1
+        - toolz >=0.7.3
+        - cytoolz >=0.7.3
+        - partd >=0.3.8
+    test:
+      imports:
+        - dask.bag
+        - dask.bytes
+  - name: dask-dataframe
+    build:
+      noarch: python
+    requirements:
+      run:
+        - dask-core  =={{ version }}
+        - numpy >=1.11.0
+        - pandas >=0.19.0
+        - toolz >=0.7.3
+        - cytoolz >=0.7.3
+        - partd >=0.3.8
+        - cloudpickle >=0.2.1
+    test:
+      imports:
+        - dask.dataframe
+        - dask.dataframe.tseries
+  - name: dask-distributed
+    build:
+      noarch: python
+    requirements:
+      run:
+        - dask-core  =={{ version }}
+        - distributed >=1.23.3
+    test:
+      imports:
+        - dask.distributed
+        - distributed
+  - name: dask-delayed
+    build:
+      noarch: python
+    requirements:
+      run:
+        - dask-core  =={{ version }}
+        - toolz >=0.7.3
+        - cytoolz >=0.7.3
+    test:
+      imports:
+        - dask.delayed
 
 about:
   home: http://github.com/dask/dask/
