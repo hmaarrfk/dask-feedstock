@@ -23,6 +23,11 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-dask-green.svg)](https://anaconda.org/conda-forge/dask) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/dask.svg)](https://anaconda.org/conda-forge/dask) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/dask.svg)](https://anaconda.org/conda-forge/dask) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/dask.svg)](https://anaconda.org/conda-forge/dask) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-dask--array-green.svg)](https://anaconda.org/conda-forge/dask-array) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/dask-array.svg)](https://anaconda.org/conda-forge/dask-array) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/dask-array.svg)](https://anaconda.org/conda-forge/dask-array) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/dask-array.svg)](https://anaconda.org/conda-forge/dask-array) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-dask--bag-green.svg)](https://anaconda.org/conda-forge/dask-bag) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/dask-bag.svg)](https://anaconda.org/conda-forge/dask-bag) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/dask-bag.svg)](https://anaconda.org/conda-forge/dask-bag) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/dask-bag.svg)](https://anaconda.org/conda-forge/dask-bag) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-dask--dataframe-green.svg)](https://anaconda.org/conda-forge/dask-dataframe) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/dask-dataframe.svg)](https://anaconda.org/conda-forge/dask-dataframe) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/dask-dataframe.svg)](https://anaconda.org/conda-forge/dask-dataframe) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/dask-dataframe.svg)](https://anaconda.org/conda-forge/dask-dataframe) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-dask--delayed-green.svg)](https://anaconda.org/conda-forge/dask-delayed) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/dask-delayed.svg)](https://anaconda.org/conda-forge/dask-delayed) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/dask-delayed.svg)](https://anaconda.org/conda-forge/dask-delayed) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/dask-delayed.svg)](https://anaconda.org/conda-forge/dask-delayed) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-dask--distributed-green.svg)](https://anaconda.org/conda-forge/dask-distributed) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/dask-distributed.svg)](https://anaconda.org/conda-forge/dask-distributed) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/dask-distributed.svg)](https://anaconda.org/conda-forge/dask-distributed) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/dask-distributed.svg)](https://anaconda.org/conda-forge/dask-distributed) |
 
 Installing dask
 ===============
@@ -33,10 +38,10 @@ Installing `dask` from the `conda-forge` channel can be achieved by adding `cond
 conda config --add channels conda-forge
 ```
 
-Once the `conda-forge` channel has been enabled, `dask` can be installed with:
+Once the `conda-forge` channel has been enabled, `dask, dask-array, dask-bag, dask-dataframe, dask-delayed, dask-distributed` can be installed with:
 
 ```
-conda install dask
+conda install dask dask-array dask-bag dask-dataframe dask-delayed dask-distributed
 ```
 
 It is possible to list all of the versions of `dask` available on your platform with:
